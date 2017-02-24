@@ -1,5 +1,7 @@
 package com.akivamu.example;
 
+import com.akivamu.example.models.Pet;
+import com.akivamu.example.repositories.PetRepository;
 import com.google.common.base.Predicates;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,11 +15,25 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import java.util.Arrays;
+
 @SpringBootApplication
 @EnableSwagger2
 public class Application {
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
+    }
+
+    @Resource
+    private PetRepository petRepository;
+
+    @PostConstruct
+    public void init() {
+        petRepository.save(new Pet("Cat 1", Arrays.asList("url1", "url2"), "available"));
+        petRepository.save(new Pet("Cat 2", Arrays.asList("url1", "url2"), "pending"));
+        petRepository.save(new Pet("Cat 3", Arrays.asList("url1", "url2"), "sold"));
     }
 
     @Bean

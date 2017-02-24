@@ -1,55 +1,30 @@
 package com.akivamu.example.models;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.List;
 
-@XmlRootElement(name = "Pet")
+@Entity
+@Data
+@NoArgsConstructor(force = true)
+@RequiredArgsConstructor
 public class Pet {
-    private long id;
-    private String name;
-    private List<String> photoUrls = new ArrayList<String>();
-    private String status;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    @XmlElement(name = "id")
-    public long getId() {
-        return id;
-    }
+    private final String name;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @ElementCollection(targetClass = String.class)
+    private final List<String> photoUrls;
 
-    @XmlElement(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @XmlElementWrapper(name = "photoUrls")
-    @XmlElement(name = "photoUrl")
-    public List<String> getPhotoUrls() {
-        return photoUrls;
-    }
-
-    public void setPhotoUrls(List<String> photoUrls) {
-        this.photoUrls = photoUrls;
-    }
-
-    @XmlElement(name = "status")
-    @ApiModelProperty(value = "pet status in the store", allowableValues = "available,pending,sold")
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    @ApiModelProperty(value = "Pet status in the store", allowableValues = "available,pending,sold")
+    private final String status;
 }
